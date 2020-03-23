@@ -12,4 +12,9 @@ public class IndexController {
     public String toIndex(Model model) {
         return "admin/index";
     }
+
+    @RequestMapping("/resource.html")
+    public String toResource(Model model) {
+        return "admin/common/resource";
+    }
 }

@@ -43,7 +43,7 @@ public class CodeGenerator {
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
         strategy.setEntityLombokModel(true);
 //        strategy.setRestControllerStyle(true);
-        strategy.setInclude(new String[]{"t_yw_wz"});
+        strategy.setInclude(new String[]{"t_article"});
 //        strategy.setControllerMappingHyphenStyle(true);
         strategy.setTablePrefix("t_");
         mpg.setStrategy(strategy);
