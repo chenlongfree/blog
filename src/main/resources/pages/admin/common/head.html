@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title,link,style)">
+    <meta charset="utf-8">
+    <title th:replace="${title}">标题</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" th:href="@{/plugins/layuiadmin/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/plugins/layuiadmin/style/admin.css}" media="all">
+    <link rel="stylesheet" th:replace="${link}">
+
+    <script th:src="@{/plugins/layuiadmin/layui/layui.js}"></script>
+    <script th:src="@{/plugins/layuiadmin/common.js}"></script>
+
+    <style th:replace="${style}"></style>
+</head>
+</html>
