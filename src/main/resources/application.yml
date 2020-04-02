@@ -1,15 +1,21 @@
 spring:
+  servlet:
+    multipart:
+      max-request-size: 100MB
+      max-file-size: 100MB
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.1.114:3306/test
+    url: jdbc:mysql://192.168.1.109:3306/blog?serverTimezone=Asia/Shanghai&
     username: root
     password: root
   thymeleaf:
     prefix: classpath:/pages/
     cache: false
-    mode: LEGACYHTML5
   resources:
     static-locations: classpath:/static/
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.loong.blog.model
+
+myconfig:
+  file-path: d:/code/file

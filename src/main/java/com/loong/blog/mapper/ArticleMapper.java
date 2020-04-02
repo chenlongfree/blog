@@ -2,6 +2,7 @@ package com.loong.blog.mapper;
 
 import com.loong.blog.model.Article;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * <p>
@@ -13,4 +14,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface ArticleMapper extends BaseMapper<Article> {
 
+    @Update("update t_article set hits = hits+1 where id = #{id}")
+    int updateHits(Article entity);
 }

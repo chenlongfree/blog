@@ -1,12 +1,11 @@
-package com.loong.blog.web.admin;
+package com.loong.blog.web.front;
 
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.loong.blog.model.Article;
 import com.loong.blog.service.IArticleService;
+import com.loong.common.constant.CacheConstant;
 import com.loong.common.pojo.ApiResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * <p>
@@ -28,51 +25,36 @@ import java.util.regex.Pattern;
  * @author loong
  * @since 2020-03-23
  */
-@Controller
-@RequestMapping("/admin/article")
+@Controller("FrontArticleController")
+@RequestMapping("/front/article")
 public class ArticleController {
 
     @Autowired
     IArticleService articleService;
 
-    @RequestMapping("/list.html")
-    public String page() {
-        return "admin/article/list";
+    @RequestMapping("/page.html")
+    public String page(@RequestParam Map<String, Object> param, Model model) {
+        Article entity = BeanUtil.mapToBean(param, Article.class, true);
+        Page<Article> page = articleService.page(entity.getPage(param), entity.getQueryWrapper());
+        for (Article a: page.getRecords()) {
+            a.setCategory(CacheConstant.dicMap.get("article_category").get(a.getCategory()));
+        }
+        model.addAttribute(page);
+        return "front/article/page";
     }
 
-    @RequestMapping("/form.html")
+    @RequestMapping("/detail.html")
     public String form(@RequestParam Map<String, Object> param, Model model) {
         Article entity = BeanUtil.mapToBean(param, Article.class, true);
         if(entity.getId() != null) {
             entity = articleService.getById(entity.getId());
+            entity.setCategory(CacheConstant.dicMap.get("article_category").get(entity.getCategory()));
+
+            articleService.updateHits(entity);
         }
         model.addAttribute(entity);
         model.addAllAttributes(param);
-        return "admin/article/form";
-    }
-
-    @RequestMapping("/crud")
-    @ResponseBody
-    public Object crud(@RequestHeader String per, @RequestParam Map<String, Object> param) {
-        Article entity = BeanUtil.mapToBean(param, Article.class, true);
-        switch (per) {
-            case "insert":
-            case "update":
-                Matcher matcher = Pattern.compile("<img.*src\\s*=\\s*(.*?)[^>]*?>").matcher(entity.getContent());
-                if(matcher.find()) {
-                    Matcher m = Pattern.compile("src\\s*=\\s*\"?(.*?)(\"|>|\\s+)").matcher(matcher.group());
-                    if (m.find()) {
-                        entity.setImg(m.group(1));
-                        entity.setSummary(entity.getSummary());
-                    }
-                }
-                articleService.saveOrUpdate(entity);
-                break;
-            case "delete":
-                articleService.removeById(entity);
-                break;
-        }
-        return ApiResult.createSuccess();
+        return "front/article/detail";
     }
 
     @RequestMapping("/list")
@@ -80,7 +62,7 @@ public class ArticleController {
     public Object list(@RequestParam Map<String, Object> param) {
         Article entity = BeanUtil.mapToBean(param, Article.class, true);
         Page page = entity.getPage(param);
-        Page rsPage = articleService.page(page);
+        Page rsPage = articleService.page(page, entity.getQueryWrapper());
         return ApiResult.createSuccess(rsPage.getTotal(), rsPage.getRecords());
     }
 }

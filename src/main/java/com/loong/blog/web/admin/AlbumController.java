@@ -2,11 +2,11 @@ package com.loong.blog.web.admin;
 
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.loong.blog.model.Article;
-import com.loong.blog.service.IArticleService;
+import com.loong.blog.model.Album;
+import com.loong.blog.model.AlbumPhoto;
+import com.loong.blog.service.IAlbumPhotoService;
+import com.loong.blog.service.IAlbumService;
 import com.loong.common.pojo.ApiResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,59 +17,55 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * <p>
- * 前端控制器
+ * 相册 前端控制器
  * </p>
  *
  * @author loong
- * @since 2020-03-23
+ * @since 2020-03-25
  */
 @Controller
-@RequestMapping("/admin/article")
-public class ArticleController {
+@RequestMapping("/admin/album")
+public class AlbumController {
 
     @Autowired
-    IArticleService articleService;
+    IAlbumService albumService;
+
+    @Autowired
+    IAlbumPhotoService albumPhotoService;
 
     @RequestMapping("/list.html")
     public String page() {
-        return "admin/article/list";
+        return "admin/album/list";
     }
 
     @RequestMapping("/form.html")
     public String form(@RequestParam Map<String, Object> param, Model model) {
-        Article entity = BeanUtil.mapToBean(param, Article.class, true);
+        Album entity = BeanUtil.mapToBean(param, Album.class, true);
         if(entity.getId() != null) {
-            entity = articleService.getById(entity.getId());
+            entity = albumService.getById(entity.getId());
         }
         model.addAttribute(entity);
         model.addAllAttributes(param);
-        return "admin/article/form";
+        return "admin/album/form";
     }
 
     @RequestMapping("/crud")
     @ResponseBody
     public Object crud(@RequestHeader String per, @RequestParam Map<String, Object> param) {
-        Article entity = BeanUtil.mapToBean(param, Article.class, true);
+        Album entity = BeanUtil.mapToBean(param, Album.class, true);
         switch (per) {
             case "insert":
             case "update":
-                Matcher matcher = Pattern.compile("<img.*src\\s*=\\s*(.*?)[^>]*?>").matcher(entity.getContent());
-                if(matcher.find()) {
-                    Matcher m = Pattern.compile("src\\s*=\\s*\"?(.*?)(\"|>|\\s+)").matcher(matcher.group());
-                    if (m.find()) {
-                        entity.setImg(m.group(1));
-                        entity.setSummary(entity.getSummary());
-                    }
-                }
-                articleService.saveOrUpdate(entity);
+                albumService.saveOrUpdate(entity);
                 break;
             case "delete":
-                articleService.removeById(entity);
+                AlbumPhoto photo = new AlbumPhoto();
+                photo.setAlbumId(entity.getId());
+                albumPhotoService.remove(photo.getQueryWrapper());
+                albumService.removeById(entity);
                 break;
         }
         return ApiResult.createSuccess();
@@ -78,9 +74,9 @@ public class ArticleController {
     @RequestMapping("/list")
     @ResponseBody
     public Object list(@RequestParam Map<String, Object> param) {
-        Article entity = BeanUtil.mapToBean(param, Article.class, true);
+        Album entity = BeanUtil.mapToBean(param, Album.class, true);
         Page page = entity.getPage(param);
-        Page rsPage = articleService.page(page);
+        Page rsPage = albumService.page(page);
         return ApiResult.createSuccess(rsPage.getTotal(), rsPage.getRecords());
     }
 }

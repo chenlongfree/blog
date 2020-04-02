@@ -4,9 +4,6 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
-import java.io.Serializable;
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.loong.common.model.BaseModel;
 import lombok.Data;
@@ -15,17 +12,17 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 
+ * 字典项目表
  * </p>
  *
  * @author loong
- * @since 2020-03-23
+ * @since 2020-03-24
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("t_article")
-public class Article extends BaseModel<Article> {
+@TableName("t_dict_item")
+public class DictItem extends BaseModel<DictItem> {
 
     private static final long serialVersionUID=1L;
 
@@ -36,56 +33,38 @@ public class Article extends BaseModel<Article> {
     private Integer id;
 
     /**
-     * 标题
+     * 字典代码
      */
-    private String title;
-
-    private String summary;
-
-    private String img;
-
-    private Integer hits;
-    private Integer praises;
+    private String dicCode;
 
     /**
-     * 内容
+     * 代码
      */
-    private String content;
+    private String code;
 
     /**
-     * 分类
+     * 名称
      */
-    private String category;
+    private String name;
 
     /**
-     * 发布人
+     * 图标
      */
-    private String author;
+    private String icon;
 
     /**
-     * 发布时间
+     * 上级代码
      */
-    private LocalDateTime publishTime;
-
-    /**
-     * 发布状态
-     */
-    private String publishStatus;
-
-    /**
-     * 创建时间
-     */
-    private LocalDateTime createTime;
-
-    /**
-     * 修改时间
-     */
-    private LocalDateTime updateTime;
+    private String pcode;
 
     @Override
     public QueryWrapper getQueryWrapper() {
         QueryWrapper queryWrapper = super.getQueryWrapper();
-        if(StrUtil.isNotBlank(this.category)) queryWrapper.eq("category", this.category);
+        if(null != id) queryWrapper.eq("id", id);
+        if(StrUtil.isNotBlank(dicCode)) queryWrapper.eq("dic_code", dicCode);
+        if(StrUtil.isNotBlank(code)) queryWrapper.eq("code", code);
+        if(StrUtil.isNotBlank(name)) queryWrapper.eq("name", name);
+        if(StrUtil.isNotBlank(pcode)) queryWrapper.eq("pcode", pcode);
         return queryWrapper;
     }
 }

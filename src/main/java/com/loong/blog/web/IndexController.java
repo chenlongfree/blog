@@ -3,13 +3,17 @@ package com.loong.blog.web;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Map;
 
 @Controller
 public class IndexController {
 
-    @RequestMapping("index.html")
-    public String toIndex(Model model) {
-        return "index";
+    @RequestMapping({"index.html", "/", ""})
+    public String toIndex(@RequestParam Map<String, Object> param, Model model) {
+        model.addAllAttributes(param);
+        return "front/index";
     }
 
     @RequestMapping("details.html")

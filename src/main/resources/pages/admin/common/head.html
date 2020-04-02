@@ -12,6 +12,31 @@
 
     <script th:src="@{/plugins/layuiadmin/layui/layui.js}"></script>
     <script th:src="@{/plugins/layuiadmin/common.js}"></script>
+    <script th:src="@{/plugins/xm-select/xm-select.js}"></script>
+    <script th:src="@{/plugins/jquery-1.12.4.min.js}"></script>
+    <script th:src="@{/js/default.js}"></script>
+
+    <script type="text/javascript" th:inline="javascript">
+        const ctx = [[${#servletContext.contextPath}]];
+
+        /** 将字典map放到缓存中，时效2小时 */
+        let dicMap = window.localStorage.getItem('dicMap');
+
+        if(undefined != dicMap && null != dicMap){
+            dicMap = JSON.parse(dicMap);
+            let saveTime = dicMap['savetime'] || 1;
+            let curTime = new Date().getTime();
+            if(curTime-saveTime > 1000 * 60 * 60 * 2){
+                dicMap = null;
+            }
+        }
+        if(undefined == dicMap || null == dicMap) {
+            get('/dict/item/dicMap', function (res) {
+                res.data['savetime'] = new Date().getTime();
+                window.localStorage.setItem('dicMap', JSON.stringify(res.data));
+            });
+        }
+    </script>
 
     <style th:replace="${style}"></style>
 </head>

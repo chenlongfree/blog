@@ -15,7 +15,7 @@
                     </a>
                 </li>
                 <li class="layui-nav-item layui-hide-xs" lay-unselect>
-                    <a href="http://www.layui.com/admin/" target="_blank" title="前台">
+                    <a href="/" target="_blank" title="前台">
                         <i class="layui-icon layui-icon-website"></i>
                     </a>
                 </li>
@@ -103,18 +103,39 @@
                         </dl>
                     </li>
                     <li data-name="wz" class="layui-nav-item">
-                        <a href="javascript:;" lay-tips="文章" lay-direction="2">
+                        <a href="javascript:;" lay-tips="文章管理" lay-direction="2">
                             <i class="layui-icon layui-icon-home"></i>
-                            <cite>文章</cite>
+                            <cite>文章管理</cite>
                         </a>
                         <dl class="layui-nav-child">
                             <dd data-name="wzlb">
-                                <a lay-href="wz/list.html">文章列表</a>
+                                <a lay-href="article/list.html">文章列表</a>
                             </dd>
                             <dd data-name="xwz">
-                                <a lay-href="home/homepage1.html">写文章</a>
+                                <a lay-href="article/form.html?per=insert">写文章</a>
                             </dd>
                         </dl>
+                    </li>
+                    <li data-name="wz" class="layui-nav-item">
+                        <a href="javascript:;" lay-tips="相册管理" lay-direction="2">
+                            <i class="layui-icon layui-icon-home"></i>
+                            <cite>相册管理</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd data-name="wzlb">
+                                <a lay-href="album/list.html">相册列表</a>
+                            </dd>
+                            <dd data-name="xwz">
+                                <a lay-href="album/photo/list.html">图片列表</a>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li data-name="get" class="layui-nav-item">
+                        <a href="javascript:;" lay-href="dict/list.html" lay-tips="字典管理"
+                           lay-direction="2">
+                            <i class="layui-icon layui-icon-auz"></i>
+                            <cite>字典管理</cite>
+                        </a>
                     </li>
                     <li data-name="get" class="layui-nav-item">
                         <a href="javascript:;" lay-href="http://www.layui.com/admin/#get" lay-tips="授权"
